@@ -1,9 +1,9 @@
 const conn = require('../configs/db')
 
 module.exports = {
-    getCompanies: () => {
+    getJobs: () => {
         return new Promise((resolve, reject) => {
-            conn.query('SELECT * FROM company', (err, result) => {
+            conn.query('SELECT * FROM job', (err, result) => {
                 if(!err){
                     resolve(result)
                 } else {
@@ -12,9 +12,9 @@ module.exports = {
             })
         })
     },
-    getCompany: (id) => {
+    getJob: (id) => {
         return new Promise((resolve, reject) => {
-            conn.query('SELECT * FROM company WHERE id = ?', id, (err, result) => {
+            conn.query('SELECT * FROM job WHERE id = ?', id, (err, result) => {
                 if(!err){
                     resolve(result)
                 } else {
@@ -23,9 +23,9 @@ module.exports = {
             })
         })
     },
-    addCompany: (data) => {
+    addJob: (data) => {
         return new Promise((resolve, reject) => {
-            conn.query('INSERT INTO company SET ?', data, (err, result) => {
+            conn.query('INSERT INTO job SET ?', data, (err, result) => {
                 if(!err){
                     resolve(result)
                 } else {
@@ -34,9 +34,9 @@ module.exports = {
             })
         })
     },
-    updateCompany: (id, data) => {
+    updateJob: (id, data) => {
         return new Promise((resolve, reject) => {
-            conn.query('UPDATE company SET ? WHERE id = ?', [data, id], (err, result) => {
+            conn.query('UPDATE job SET ? WHERE id = ?', [data, id], (err, result) => {
                 if(!err){
                     resolve(result)
                 } else {
@@ -45,9 +45,9 @@ module.exports = {
             })
         })
     },
-    deleteCompany: (id) => {
+    deleteJob: (id) => {
         return new Promise((resolve, reject) => {
-            conn.query('DELETE FROM company WHERE id = ?', id, (err, result) => {
+            conn.query('DELETE FROM job WHERE id = ?', id, (err, result) => {
                 if(!err){
                     resolve(result)
                 } else {
