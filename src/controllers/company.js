@@ -1,4 +1,5 @@
 const companyModels = require('../models/company')
+const uuid4 = require('uuid/v4')
 
 module.exports = {
     getCompanies: (req, res) => {
@@ -22,6 +23,7 @@ module.exports = {
     },
     addCompany: (req, res) => {
         const data = req.body
+        data.id = uuid4()
 
         companyModels.addCompany(data)
             .then(result => {

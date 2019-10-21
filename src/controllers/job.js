@@ -1,5 +1,6 @@
 const jobModels = require('../models/job')
 const DATE_FORMATER = require( 'dateformat' );
+const uuid4 = require('uuid/v4')
 
 module.exports = {
     getJobs: (req, res) => {
@@ -25,6 +26,7 @@ module.exports = {
     addJob: (req, res) => {
         const data = req.body
         const date = DATE_FORMATER( Date.now(), "yyyy-mm-dd HH:MM:ss" );
+        data.id = uuid4()
         data.date_added = date
         data.date_updated = date
 
