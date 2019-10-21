@@ -22,7 +22,8 @@ module.exports = {
             })
     },
     redirectFirstPage: (req,res) => {
-        res.redirect(url.format({pathname:'../job/1',query:req.query}))
+        const data = req.query
+        res.redirect(url.format({pathname:'../job/jobs/1',query:data}))
     },
     getJob: (req, res) => {
         const {id} = req.params
@@ -68,6 +69,24 @@ module.exports = {
         const {id} = req.params
 
         jobModels.deleteJob(id)
+            .then(result => {
+                res.json(result)
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    },
+    searchJob: (req, res) => {
+        console.log("\n\n\n Sampai sini \n\n\n")
+        let {qname, qcompany} = req.query
+        if(qname === undefined) {
+            qname = '%'
+        }
+        if(qcompany === undefined) {
+            qcompany = '%'
+        }
+
+        jobModels.searchJob(qname, qcompany)
             .then(result => {
                 res.json(result)
             })

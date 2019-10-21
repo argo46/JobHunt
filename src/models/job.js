@@ -4,8 +4,7 @@ module.exports = {
     getJobs: (page, orderby, order) => {
         return new Promise((resolve, reject) => {
             const itemPerPage = 10
-            console.log(orderby)
-            console.log(order)
+        
             conn.query(`SELECT j.id, j.name, cat.name as category, com.name as company, j.salary, j.location, j.description, j.date_added, date_updated 
                         FROM job as j INNER JOIN category as cat ON j.category = cat.id 
                         JOIN company as com ON j.company = com.id
@@ -24,7 +23,8 @@ module.exports = {
             conn.query(`SELECT j.name, cat.name as category, com.name as company, j.salary, j.location, j.description, j.date_added, date_updated 
                         FROM job as j INNER JOIN category as cat ON j.category = cat.id 
                         JOIN company as com ON j.company = com.id
-                        WHERE j.id = ?`, id, (err, result) => {
+                        WHERE j.id = '${id}'`, (err, result) => {
+
                 if(!err){
                     resolve(result)
                 } else {
@@ -58,6 +58,20 @@ module.exports = {
     deleteJob: (id) => {
         return new Promise((resolve, reject) => {
             conn.query('DELETE FROM job WHERE id = ?', id, (err, result) => {
+                if(!err){
+                    resolve(result)
+                } else {
+                    reject(new Error(err))
+                }
+            })
+        })
+    },
+    searchJob: (qname, qcompany) => {
+        return new Promise((resolve, reject) => {
+            conn.query(`SELECT j.id, j.name, cat.name as category, com.name as company, j.salary, j.location, j.description, j.date_added, date_updated 
+            FROM job as j INNER JOIN category as cat ON j.category = cat.id 
+            JOIN company as com ON j.company = com.id
+            WHERE j.name LIKE '%${qname}%' AND com.name LIKE '%${qcompany}%'`, (err, result) => {
                 if(!err){
                     resolve(result)
                 } else {
