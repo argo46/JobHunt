@@ -1,5 +1,4 @@
 const jobModels = require('../models/job')
-const DATE_FORMATER = require( 'dateformat' );
 const url = require('url');
 const uuid4 = require('uuid/v4')
 
@@ -23,7 +22,7 @@ module.exports = {
     },
     redirectFirstPage: (req,res) => {
         const data = req.query
-        res.redirect(url.format({pathname:'../job/jobs/1',query:data}))
+        res.redirect(url.format({pathname:'localhost:3000/job/jobs/1',query:data}))
     },
     getJob: (req, res) => {
         const {id} = req.params
@@ -38,7 +37,7 @@ module.exports = {
     },
     addJob: (req, res) => {
         const data = req.body
-        const date = DATE_FORMATER( Date.now(), "yyyy-mm-dd HH:MM:ss" );
+        const date = new Date()//DATE_FORMATER( Date.now(), "yyyy-mm-dd HH:MM:ss" );
         data.id = uuid4()
         data.date_added = date
         data.date_updated = date
@@ -54,7 +53,7 @@ module.exports = {
     updateJob: (req, res) => {
         const {id} = req.params
         const data = req.body
-        const date = DATE_FORMATER( Date.now(), "yyyy-mm-dd HH:MM:ss" );
+        const date = new Date()
         data.date_updated = date
 
         jobModels.updateJob(id, data)
@@ -77,7 +76,6 @@ module.exports = {
             })
     },
     searchJob: (req, res) => {
-        console.log("\n\n\n Sampai sini \n\n\n")
         let {qname, qcompany} = req.query
         if(qname === undefined) {
             qname = '%'

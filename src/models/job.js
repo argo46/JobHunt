@@ -3,7 +3,7 @@ const conn = require('../configs/db')
 module.exports = {
     getJobs: (page, orderby, order) => {
         return new Promise((resolve, reject) => {
-            const itemPerPage = 10
+            const itemPerPage = 2
         
             conn.query(`SELECT j.id, j.name, cat.name as category, com.name as company, j.salary, j.location, j.description, j.date_added, date_updated 
                         FROM job as j INNER JOIN category as cat ON j.category = cat.id 
