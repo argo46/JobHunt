@@ -1,4 +1,5 @@
 const jobModels = require('../models/job')
+const DATE_FORMATER = require( 'dateformat' );
 
 module.exports = {
     getJobs: (req, res) => {
@@ -23,6 +24,9 @@ module.exports = {
     },
     addJob: (req, res) => {
         const data = req.body
+        const date = DATE_FORMATER( Date.now(), "yyyy-mm-dd HH:MM:ss" );
+        data.date_added = date
+        data.date_updated = date
 
         jobModels.addJob(data)
             .then(result => {
@@ -35,6 +39,8 @@ module.exports = {
     updateJob: (req, res) => {
         const {id} = req.params
         const data = req.body
+        const date = DATE_FORMATER( Date.now(), "yyyy-mm-dd HH:MM:ss" );
+        data.date_updated = date
 
         jobModels.updateJob(id, data)
             .then(result => {
