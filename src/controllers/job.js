@@ -1,16 +1,28 @@
 const jobModels = require('../models/job')
 const DATE_FORMATER = require( 'dateformat' );
+const url = require('url');
 const uuid4 = require('uuid/v4')
 
 module.exports = {
     getJobs: (req, res) => {
-        jobModels.getJobs()
+        const {page} = req.params
+        let {orderby, order} = req.query
+        if(orderby === undefined) {
+            orderby='date_updated'
+        }
+        if(order === undefined){
+            order='ASC'
+        }
+        jobModels.getJobs(page, orderby, order)
             .then(result => {
                 res.json(result)
             })
             .catch(err => {
                 console.log(err)
             })
+    },
+    redirectFirstPage: (req,res) => {
+        res.redirect(url.format({pathname:'../job/1',query:req.query}))
     },
     getJob: (req, res) => {
         const {id} = req.params

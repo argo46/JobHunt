@@ -1,11 +1,16 @@
 const conn = require('../configs/db')
 
 module.exports = {
-    getJobs: () => {
+    getJobs: (page, orderby, order) => {
         return new Promise((resolve, reject) => {
-            conn.query(`SELECT j.name, cat.name as category, com.name as company, j.salary, j.location, j.description, j.date_added, date_updated 
+            const itemPerPage = 10
+            console.log(orderby)
+            console.log(order)
+            conn.query(`SELECT j.id, j.name, cat.name as category, com.name as company, j.salary, j.location, j.description, j.date_added, date_updated 
                         FROM job as j INNER JOIN category as cat ON j.category = cat.id 
-                        JOIN company as com ON j.company = com.id`, (err, result) => {
+                        JOIN company as com ON j.company = com.id
+                        ORDER BY ${orderby} ${order}
+                        LIMIT ${itemPerPage} OFFSET ${(page - 1)*itemPerPage}`, (err, result) => {
                 if(!err){
                     resolve(result)
                 } else {
