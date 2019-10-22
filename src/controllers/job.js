@@ -2,17 +2,26 @@ const jobModels = require('../models/job')
 const url = require('url');
 const uuid4 = require('uuid/v4')
 
+// TODO : add validation to variable for error handling
+
 module.exports = {
     getJobs: (req, res) => {
         const {page} = req.params
+        
+        /* get and set default value for orderby and order */
         let {orderby, order} = req.query
-        if(orderby === undefined) {
-            orderby='date_updated'
-        }
-        if(order === undefined){
-            order='ASC'
-        }
-        jobModels.getJobs(page, orderby, order)
+        if(orderby === undefined) orderby='date_updated'
+        if(order === undefined) order='ASC'
+
+        /* get and set default value for search query(qname, qcompany) */
+        let {qname, qcompany} = req.query
+        
+        if(qname === undefined) qname = '%'
+            else qname = `%${qname}%`
+        if(qcompany === undefined) qcompany = '%'
+            else qcompany = `%${qcompany}%`
+
+        jobModels.getJobs(page, orderby, order, qname, qcompany)
             .then(result => {
                 res.json(result)
             })
@@ -22,7 +31,7 @@ module.exports = {
     },
     redirectFirstPage: (req,res) => {
         const data = req.query
-        res.redirect(url.format({pathname:'localhost:3000/job/jobs/1',query:data}))
+        res.redirect(url.format({pathname:'../../job/jobs/1',query:data}))
     },
     getJob: (req, res) => {
         const {id} = req.params
@@ -37,7 +46,7 @@ module.exports = {
     },
     addJob: (req, res) => {
         const data = req.body
-        const date = new Date()//DATE_FORMATER( Date.now(), "yyyy-mm-dd HH:MM:ss" );
+        const date = new Date()
         data.id = uuid4()
         data.date_added = date
         data.date_updated = date
@@ -74,15 +83,11 @@ module.exports = {
             .catch(err => {
                 console.log(err)
             })
-    },
-    searchJob: (req, res) => {
+    }
+    /*, searchJob: (req, res) => {
         let {qname, qcompany} = req.query
-        if(qname === undefined) {
-            qname = '%'
-        }
-        if(qcompany === undefined) {
-            qcompany = '%'
-        }
+        if(qname === undefined) qname = '%'
+        if(qcompany === undefined) qcompany = '%'
 
         jobModels.searchJob(qname, qcompany)
             .then(result => {
@@ -91,5 +96,5 @@ module.exports = {
             .catch(err => {
                 console.log(err)
             })
-    }
+    } */
 }

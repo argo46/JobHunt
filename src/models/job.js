@@ -1,15 +1,16 @@
 const conn = require('../configs/db')
 
 module.exports = {
-    getJobs: (page, orderby, order) => {
+    getJobs: (page, orderby, order, qname, qcompany) => {
         return new Promise((resolve, reject) => {
             const itemPerPage = 2
         
             conn.query(`SELECT j.id, j.name, cat.name as category, com.name as company, j.salary, j.location, j.description, j.date_added, date_updated 
                         FROM job as j INNER JOIN category as cat ON j.category = cat.id 
                         JOIN company as com ON j.company = com.id
-                        ORDER BY ${orderby} ${order}
-                        LIMIT ${itemPerPage} OFFSET ${(page - 1)*itemPerPage}`, (err, result) => {
+                        WHERE j.name LIKE ? AND com.name LIKE ?
+                        ORDER BY ? ?
+                        LIMIT ? OFFSET ?`, [qname, qcompany, orderby, order, itemPerPage, (page - 1)*itemPerPage], (err, result) => {
                 if(!err){
                     resolve(result)
                 } else {
@@ -23,7 +24,7 @@ module.exports = {
             conn.query(`SELECT j.name, cat.name as category, com.name as company, j.salary, j.location, j.description, j.date_added, date_updated 
                         FROM job as j INNER JOIN category as cat ON j.category = cat.id 
                         JOIN company as com ON j.company = com.id
-                        WHERE j.id = '${id}'`, (err, result) => {
+                        WHERE j.id = ?`,id, (err, result) => {
 
                 if(!err){
                     resolve(result)
@@ -65,7 +66,8 @@ module.exports = {
                 }
             })
         })
-    },
+    }
+    /* ,
     searchJob: (qname, qcompany) => {
         return new Promise((resolve, reject) => {
             conn.query(`SELECT j.id, j.name, cat.name as category, com.name as company, j.salary, j.location, j.description, j.date_added, date_updated 
@@ -79,5 +81,5 @@ module.exports = {
                 }
             })
         })
-    }
+    } */
 }
