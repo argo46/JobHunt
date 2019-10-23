@@ -2,9 +2,9 @@ const signupModels = require('../models/signup')
 const uuid4 = require('uuid/v4')
 const bcrypt = require('../helpers/bcrypt')
 
-// TODO : adding registration module
-
 module.exports = {
+    
+    //add user async/await for waiting password been hashed
     addUser: async (req,res) => {
         const data = req.body
         data.id = uuid4()

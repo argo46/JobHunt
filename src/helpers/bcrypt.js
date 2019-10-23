@@ -2,6 +2,8 @@ const bcrypt = require('bcrypt')
 const saltRounds = 10
 
 module.exports = {
+    
+    //generate hash for password
     hashPassword: (plainPass) => {
         return new Promise ((resolve, reject) => {
             bcrypt.genSalt(saltRounds, (err, salt) => {

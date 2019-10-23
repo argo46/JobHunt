@@ -6,17 +6,19 @@ module.exports = {
     login: (req, res) => {
 
         let {email, username} = req.body
+
+        //setting default value for 
+        //TODO if undefined should throw message email must be inputed
         if(email === undefined) email = '%'
         if(username === undefined) username = '%'
         loginModels.login(email, username)
             .then (result => {
                 bcrypt.compare(req.body.password, result[0].password)
                     .then(bresult => {
-                        console.log(typeof result[0])
                         let token = jwt.sign(JSON.stringify(result[0]),process.env.JWT_SECRET_KEY)
                         res.json({
                             message : "succes",
-                            token : token
+                            token : token,
                         })
                     })
                     .catch(error => {
