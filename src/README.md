@@ -29,7 +29,6 @@
 <ol>
   <li>Basic Configuration</li>
   <li>Structured</li>
-  <li>File Handling</li>
   <li>Auth with JWT</li>
   <li>Redis Implementation</li>
 </ol>
