@@ -4,6 +4,6 @@ const Route = express.Router()
 const loginController = require('../controllers/login')
 
 Route
-    .post('/', loginController.login)
+  .post('/', loginController.login)
 
 module.exports = Route
