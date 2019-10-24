@@ -1,4 +1,4 @@
-# Express Job posting app Rest API
+# Express Job posting app Rest API.
 ---
 ## Table of Contents
 
