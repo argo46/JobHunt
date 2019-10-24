@@ -19,19 +19,17 @@ module.exports = {
     else qname = `%${qname}%`
     if (qcompany === undefined) qcompany = '%'
     else qcompany = `%${qcompany}%`
-
     // create redis key depends on the parameter
     const redisKey = req.url
     redis.isKeyExist(redisKey)
       .then((result) => {
         if (result !== 0) {
-          redis.client.get(redisKey, function (error, result) {
+          redis.client.get(redisKey, (error, result) => {
             if (error) {
               console.log(error)
               throw error
             }
             result = JSON.parse(result)
-            console.log('get data from redis')
             res.json({
               page,
               result
@@ -41,7 +39,6 @@ module.exports = {
           jobModels.getJobs(page, orderby, order, qname, qcompany)
             .then((result) => {
               redis.client.setex(redisKey, 3600, JSON.stringify(result))
-              console.log('get data from db')
               res.json({
                 page,
                 result
@@ -88,12 +85,23 @@ module.exports = {
       })
   },
 
-  addJob: (req, res) => {
+  addJob: async (req, res) => {
     const data = req.body
     const date = new Date()
     data.id = uuid4()
     data.date_added = date
     data.date_updated = date
+
+    /* Delete all job cache in redis because of job change */
+    let keys
+    redis.getKeys('/jobs/*')
+      .then(result => {
+        keys = result
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    redis.client.del(keys)
 
     jobModels.addJob(data)
       .then(() => {
@@ -107,11 +115,22 @@ module.exports = {
       })
   },
 
-  updateJob: (req, res) => {
+  updateJob: async (req, res) => {
     const { id } = req.params
     const data = req.body
     const date = new Date()
     data.date_updated = date
+
+    /* Delete all job cache in redis because of job change */
+    let keys
+    redis.getKeys('/jobs/*')
+      .then(result => {
+        keys = result
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    redis.client.del(keys)
 
     jobModels.updateJob(id, data)
       .then(() => {
@@ -125,8 +144,20 @@ module.exports = {
       })
   },
 
-  deleteJob: (req, res) => {
+  deleteJob: async (req, res) => {
     const { id } = req.params
+
+    /* Delete all job cache in redis because of job change */
+    // const keys = await redis.getKeys('/jobs/*')
+    let keys
+    redis.getKeys('/jobs/*')
+      .then(result => {
+        keys = result
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    redis.client.del(keys)
 
     jobModels.deleteJob(id)
       .then((result) => {

@@ -3,13 +3,17 @@ const Route = express.Router()
 
 const jobController = require('../controllers/job')
 
+const passport = require('../helpers/passport')
+
+const isAuthenticated = passport.authenticate('jwt', { session: false })
+
 Route
   .get('/', jobController.redirectFirstPage)
   .get('/jobs', jobController.redirectFirstPage)
   .get('/jobs/:page', jobController.getJobs)
   .get('/id/:id', jobController.getJob)
 // .get('/search/', jobController.searchJob)
-  .post('/', jobController.addJob)
+  .post('/', isAuthenticated, jobController.addJob)
   .patch('/:id', jobController.updateJob)
   .delete('/:id', jobController.deleteJob)
 
