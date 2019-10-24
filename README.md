@@ -10,7 +10,6 @@
   - [Environment](#create-environment-variable)
   - [Start](#start-development-server)
 - [Dependencies](#dependencies)
-- [License](#license)
 ---
 
 ## Introduction
