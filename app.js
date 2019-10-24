@@ -5,14 +5,14 @@ const logger = require('morgan')
 const cors = require('cors')
 
 const app = express()
-const port= configs.port
+const port = configs.port
 const routerNav = require('./src/index')
 
-//Enable All CORS Requests
+// Enable All CORS Requests
 app.use(cors())
 
 app.listen(port, () => {
-    console.log(`\n Server listening on port ${port} \n`)
+  console.log(`\n Server listening on port ${port} \n`)
 })
 
 app.use(bodyParser.json())
