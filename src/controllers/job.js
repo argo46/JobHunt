@@ -98,7 +98,7 @@ module.exports = {
     jobModels.addJob(data)
       .then(() => {
         res.json({
-          message: 'succes',
+          message: 'success',
           data
         })
       })
@@ -116,7 +116,7 @@ module.exports = {
     jobModels.updateJob(id, data)
       .then(() => {
         res.json({
-          message: 'succes',
+          message: 'success',
           data
         })
       })
@@ -131,7 +131,7 @@ module.exports = {
     jobModels.deleteJob(id)
       .then((result) => {
         res.json({
-          message: 'succes',
+          message: 'success',
           result
         })
       })

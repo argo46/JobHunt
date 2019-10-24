@@ -28,7 +28,7 @@ module.exports = {
     companyModels.addCompany(data)
       .then(() => {
         res.json({
-          message: 'succes',
+          message: 'success',
           data
         })
       })
@@ -43,7 +43,7 @@ module.exports = {
     companyModels.updateCompany(id, data)
       .then(() => {
         res.json({
-          message: 'succes',
+          message: 'success',
           data
         })
       })
@@ -57,7 +57,7 @@ module.exports = {
     companyModels.deleteCompany(id)
       .then((result) => {
         res.json({
-          message: 'succes',
+          message: 'success',
           result
         })
       })
