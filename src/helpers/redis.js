@@ -29,5 +29,16 @@ module.exports = {
         }
       })
     })
+  },
+  getKeys: (keyPattern) => {
+    return new Promise((resolve, reject) => {
+      client.keys(keyPattern, (err, keys) => {
+        if (!err) {
+          resolve(keys)
+        } else {
+          reject(new Error(err))
+        }
+      })
+    })
   }
 }
