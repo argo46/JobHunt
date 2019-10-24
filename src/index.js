@@ -3,13 +3,11 @@ const Route = express.Router()
 
 const company = require('./routes/company')
 const job = require('./routes/job')
-const signup = require('./routes/signup')
-const login = require('./routes/login')
+const user = require('./routes/user')
 
 Route
   .use('/company', company)
   .use('/job', job)
-  .use('/signup', signup)
-  .use('/login', login)
+  .use('/user', user)
 
 module.exports = Route

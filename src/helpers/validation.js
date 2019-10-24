@@ -1,4 +1,4 @@
-const signupModels = require('../models/signup')
+const userModels = require('../models/user')
 
 module.exports = {
   emailText: (email) => {
@@ -31,7 +31,7 @@ module.exports = {
   isEmailOrUserNameExistInDb: async (email, userName) => {
     const result = {}
     // check email
-    await signupModels.checkEmailAndUsername(email, '')
+    await userModels.checkEmailAndUsername(email, '')
       .then(data => {
         if (data.length > 0) {
           result.emailInvalid = true
@@ -44,7 +44,7 @@ module.exports = {
       })
 
     // check username
-    await signupModels.checkEmailAndUsername('', userName)
+    await userModels.checkEmailAndUsername('', userName)
       .then(async data => {
         if (data.length > 0) {
           result.usernameInvalid = true
