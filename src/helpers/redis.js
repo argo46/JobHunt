@@ -18,7 +18,7 @@ client.on('error', (err) => {
 module.exports = {
   client,
 
-  // function to check if key already exist in redis memory, return = {0,1}
+  // function to check if key already exist in redis memory, return = {0/1}
   isKeyExist: (key) => {
     return new Promise((resolve, reject) => {
       client.exists(key, (err, reply) => {

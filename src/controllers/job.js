@@ -21,39 +21,21 @@ module.exports = {
     else qcompany = `%${qcompany}%`
     // create redis key depends on the parameter
     const redisKey = req.url
-    redis.isKeyExist(redisKey)
-      .then((result) => {
-        if (result !== 0) {
-          redis.client.get(redisKey, (error, result) => {
-            if (error) {
-              console.log(error)
-              throw error
-            }
-            result = JSON.parse(result)
-            res.json({
-              page,
-              result
-            })
-          })
-        } else {
-          jobModels.getJobs(page, orderby, order, qname, qcompany)
-            .then((result) => {
-              redis.client.setex(redisKey, 3600, JSON.stringify(result))
-              res.json({
-                page,
-                result
-              })
-            })
-            .catch((err) => {
-              console.log(err)
-            })
-        }
-      })
-      .catch((err) => {
-        /* this method run when redis cant be connect. this method always get from database */
-        console.log(err)
+
+    redis.client.get(redisKey, (error, result) => {
+      if (error) {
+        console.log(error)
+        throw error
+      } else if (result) {
+        result = JSON.parse(result)
+        res.json({
+          page,
+          result
+        })
+      } else {
         jobModels.getJobs(page, orderby, order, qname, qcompany)
           .then((result) => {
+            redis.client.setex(redisKey, 3600, JSON.stringify(result))
             res.json({
               page,
               result
@@ -62,8 +44,10 @@ module.exports = {
           .catch((err) => {
             console.log(err)
           })
-      })
+      }
+    })
   },
+
   /**
   *method for redirecting endpoint{job/1, job/jobs/} to job/jobs/1
   */
@@ -85,7 +69,7 @@ module.exports = {
       })
   },
 
-  addJob: async (req, res) => {
+  addJob: (req, res) => {
     const data = req.body
     const date = new Date()
     data.id = uuid4()
@@ -97,11 +81,11 @@ module.exports = {
     redis.getKeys('/jobs/*')
       .then(result => {
         keys = result
+        redis.client.del(keys)
       })
       .catch(err => {
         console.log(err)
       })
-    redis.client.del(keys)
 
     jobModels.addJob(data)
       .then(() => {
@@ -115,7 +99,7 @@ module.exports = {
       })
   },
 
-  updateJob: async (req, res) => {
+  updateJob: (req, res) => {
     const { id } = req.params
     const data = req.body
     const date = new Date()
@@ -126,11 +110,11 @@ module.exports = {
     redis.getKeys('/jobs/*')
       .then(result => {
         keys = result
+        redis.client.del(keys)
       })
       .catch(err => {
         console.log(err)
       })
-    redis.client.del(keys)
 
     jobModels.updateJob(id, data)
       .then(() => {
@@ -153,11 +137,11 @@ module.exports = {
     redis.getKeys('/jobs/*')
       .then(result => {
         keys = result
+        redis.client.del(keys)
       })
       .catch(err => {
         console.log(err)
       })
-    redis.client.del(keys)
 
     jobModels.deleteJob(id)
       .then((result) => {
