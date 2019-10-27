@@ -25,6 +25,18 @@ module.exports = {
     const data = req.body
     data.id = uuid4()
 
+    if (!req.file) {
+      res.json({
+        success: false,
+        message: 'No company logo uploaded'
+      })
+    } else {
+      const host = req.hostname
+      req.file.filename = data.name + req.file.filename
+      const filePath = req.protocol + '://' + host + ':3000' + '/' + req.file.path
+      data.logo = filePath
+    }
+
     companyModels.addCompany(data)
       .then(() => {
         res.json({

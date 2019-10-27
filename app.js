@@ -3,6 +3,7 @@ const bodyParser = require('body-parser')
 const configs = require('./src/configs/configs')
 const logger = require('morgan')
 const cors = require('cors')
+const path = require('path')
 
 const app = express()
 const port = configs.port
@@ -18,6 +19,8 @@ app.listen(port, () => {
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(logger('dev'))
+
+app.use('/public', express.static(path.join(__dirname, 'public')))
 
 app.use('/', routerNav)
 
