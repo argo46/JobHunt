@@ -13,7 +13,8 @@ var storageMulter = multer.diskStorage({
 var fileFilter = (req, file, callback) => {
   var ext = path.extname(file.originalname)
   if (ext !== '.png' && ext !== '.jpg' && ext !== '.svg' && ext !== '.jpeg') {
-    return callback(new Error('Only images are allowed'))
+    callback(null, false)
+    return
   }
   callback(null, true)
 }

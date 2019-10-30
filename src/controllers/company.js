@@ -24,16 +24,16 @@ module.exports = {
   addCompany: (req, res) => {
     const data = req.body
     data.id = uuid4()
-
     if (!req.file) {
       res.json({
         success: false,
-        message: 'No company logo uploaded'
+        message: 'No company logo uploaded or file format is not supported'
       })
+      return
     } else {
       const host = req.hostname
       req.file.filename = data.name + req.file.filename
-      const filePath = req.protocol + '://' + host + ':3000' + '/' + req.file.path
+      const filePath = req.protocol + '://' + host + ':' + process.env.PORT + '/' + req.file.path
       data.logo = filePath
     }
 
@@ -65,12 +65,12 @@ module.exports = {
   },
   deleteCompany: (req, res) => {
     const { id } = req.params
-
+    // TODO validate delete if is exist
     companyModels.deleteCompany(id)
       .then((result) => {
         res.json({
           message: 'success',
-          result
+          id
         })
       })
       .catch((err) => {

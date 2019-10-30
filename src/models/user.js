@@ -38,4 +38,8 @@ module.exports = {
       })
     })
   }
+
+  // getUserData: (email) => {
+
+  // }
 }

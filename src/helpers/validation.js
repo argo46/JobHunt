@@ -57,6 +57,23 @@ module.exports = {
       })
     return result
   },
+  setDefaultValue: (variable, isEqual, comparator, value) => {
+    if (isEqual) {
+      if (variable === comparator) {
+        variable = value
+        return variable
+      } else {
+        return variable
+      }
+    } else {
+      if (variable !== comparator) {
+        variable = value
+        return variable
+      } else {
+        return variable
+      }
+    }
+  },
 
   invalid: (res, message, status) => {
     res.status(400)

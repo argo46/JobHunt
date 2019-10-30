@@ -9,8 +9,8 @@ const isAuthenticated = passport.authenticate('jwt', { session: false })
 
 Route
   .get('/', jobController.redirectFirstPage)
-  .get('/jobs', jobController.redirectFirstPage)
-  .get('/jobs/:page', jobController.getJobs)
+  .get('/jobs', jobController.getJobs)
+  // .get('/jobs/:page', jobController.getJobs)
   .get('/id/:id', jobController.getJob)
 // .get('/search/', jobController.searchJob)
   .post('/', isAuthenticated, jobController.addJob)

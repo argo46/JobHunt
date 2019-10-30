@@ -69,7 +69,8 @@ module.exports = {
               const token = jwt.sign(JSON.stringify(result[0]), process.env.JWT_SECRET_KEY)
               res.json({
                 message: 'succes',
-                token: token
+                token: token,
+                result: result[0]
               })
             } else {
               res.status(401)
