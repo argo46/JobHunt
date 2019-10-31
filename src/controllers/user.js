@@ -40,7 +40,11 @@ module.exports = {
     // saving to database
     userModels.addUser(data)
       .then(result => {
-        res.json(result)
+        res.json({
+          success: true,
+          message: 'user succesfully added',
+          user_id: data.id
+        })
       })
       .catch(err => {
         console.log(err)

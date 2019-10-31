@@ -60,6 +60,7 @@ module.exports = {
   },
 
   addJob: (data) => {
+    console.log(data)
     return new Promise((resolve, reject) => {
       conn.query('INSERT INTO job SET ?', data, (err, result) => {
         if (!err) {
