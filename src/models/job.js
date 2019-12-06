@@ -13,7 +13,7 @@ module.exports = {
      */
   getJobs: (page, orderby, order, qname, qcompany) => {
     return new Promise((resolve, reject) => {
-      const itemPerPage = 3 // limit item per page
+      const itemPerPage = 5 // limit item per page
       conn.query(`SELECT j.id, j.name as name, cat.name as category, com.name as company, j.company as company_id, com.logo as company_logo, j.salary, j.location, j.description, j.date_added, j.date_updated
                   FROM job as j INNER JOIN category as cat ON j.category = cat.id 
                   JOIN company as com ON j.company = com.id
@@ -46,7 +46,7 @@ module.exports = {
   // get single job
   getJob: (id) => {
     return new Promise((resolve, reject) => {
-      conn.query(`SELECT j.name, cat.name as category, com.name as company, j.salary, j.location, j.description, j.date_added, date_updated 
+      conn.query(`SELECT j.name, cat.name as category, com.name as company, com.id as company_id, j.salary, j.location, j.description, j.date_added, date_updated 
                         FROM job as j INNER JOIN category as cat ON j.category = cat.id 
                         JOIN company as com ON j.company = com.id
                         WHERE j.id = ?`, id, (err, result) => {

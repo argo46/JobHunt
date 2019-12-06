@@ -53,7 +53,7 @@ module.exports = {
   login: (req, res) => {
     let { email, username } = req.body
 
-    // setting default value for
+    // setting default value fors
     if (email === undefined && username === undefined) {
       res.status(401)
       res.json({
@@ -67,26 +67,34 @@ module.exports = {
 
     userModels.login(email, username)
       .then(result => {
-        bcrypt.compare(req.body.password, result[0].password)
-          .then(bresult => {
-            if (bresult) {
-              const token = jwt.sign(JSON.stringify(result[0]), process.env.JWT_SECRET_KEY)
-              res.json({
-                message: 'succes',
-                token: token,
-                result: result[0]
-              })
-            } else {
-              res.status(401)
-              res.json({
-                status: 401,
-                message: 'Wrong email or password'
-              })
-            }
+        if (result.length < 1) {
+          res.status(401)
+          res.json({
+            status: 401,
+            message: 'Wrong email or password'
           })
-          .catch(error => {
-            console.log(error)
-          })
+        } else {
+          bcrypt.compare(req.body.password, result[0].password)
+            .then(bresult => {
+              if (bresult) {
+                const token = jwt.sign(JSON.stringify(result[0]), process.env.JWT_SECRET_KEY)
+                res.json({
+                  message: 'succes',
+                  token: token,
+                  result: result[0]
+                })
+              } else {
+                res.status(401)
+                res.json({
+                  status: 401,
+                  message: 'Wrong email or password'
+                })
+              }
+            })
+            .catch(error => {
+              console.log(error)
+            })
+        }
       })
       .catch(err => {
         console.log(err)

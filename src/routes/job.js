@@ -14,7 +14,7 @@ Route
   .get('/id/:id', jobController.getJob)
 // .get('/search/', jobController.searchJob)
   .post('/', isAuthenticated, jobController.addJob)
-  .patch('/:id', jobController.updateJob)
-  .delete('/:id', jobController.deleteJob)
+  .patch('/:id', isAuthenticated, jobController.updateJob)
+  .delete('/:id', isAuthenticated, jobController.deleteJob)
 
 module.exports = Route

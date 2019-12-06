@@ -8,7 +8,7 @@ Route
   .get('/', companyController.getCompanies)
   .get('/:id', companyController.getCompany)
   .post('/', upload.single('logo'), companyController.addCompany)
-  .patch('/:id', companyController.updateCompany)
+  .patch('/:id', upload.single('logo'), companyController.updateCompany)
   .delete('/:id', companyController.deleteCompany)
 
 module.exports = Route

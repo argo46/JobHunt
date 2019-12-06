@@ -11,15 +11,22 @@ module.exports = {
     let { orderby, order, page } = req.query
 
     orderby = validator.setDefaultValue(orderby, false, 'name' || 'date_updated' || 'category', 'date_updated')
-    order = validator.setDefaultValue(order, false, 'ASC' || 'DESC', 'ASC')
+    // order = validator.setDefaultValue(order, false, 'ASC' && 'DESC', 'ASC')
+    if (order === undefined) {
+      order = 'ASC'
+    } else if (order !== 'asc') {
+      if (order !== 'desc') {
+        order = 'ASC'
+      }
+    }
     page = await validator.setDefaultValue(page, true, undefined, '1')
 
     /* get and set default value for search query(qname, qcompany) */
     let { qname, qcompany } = req.query
 
-    if (qname === undefined) qname = '%'
+    if (qname === undefined || qname === '') qname = '%'
     else qname = `%${qname}%`
-    if (qcompany === undefined) qcompany = '%'
+    if (qcompany === undefined || qcompany === '') qcompany = '%'
     else qcompany = `%${qcompany}%`
     // create redis key depends on the parameter
     const redisKey = req.url
@@ -79,15 +86,15 @@ module.exports = {
                 redis.client.setex(redisKey, 3600, JSON.stringify(result))
                 redis.client.setex('/jobs/total_data', 3600, String(totalJobs[0].total_data))
 
-                let totalPages = parseInt(totalJobs[0].total_data / 3)
-                if (totalJobs[0].total_data % 3 > 0) { totalPages += 1 }
+                let totalPages = parseInt(totalJobs[0].total_data / 5)
+                if (totalJobs[0].total_data % 5 > 0) { totalPages += 1 }
 
                 let nextPage = ''
                 if (totalPages <= page) {
                   nextPage = ''
                 } else {
-                  let nextQueryData = { page: 1 }
-                  if (req.query.page) { nextQueryData = Object.assign({}, req.query) }
+                  const nextQueryData = Object.assign({}, req.query)
+                  if (!req.query.page) { nextQueryData.page = 1 }
                   nextQueryData.page = parseInt(nextQueryData.page) + 1
                   nextPage = `${req.protocol}://${host}:${process.env.PORT}/job/?${queryString.stringify(nextQueryData)}`
                 }
@@ -96,10 +103,13 @@ module.exports = {
                 if (page <= 1) {
                   prevPage = ''
                 } else {
-                  let prevQueryData = { page: 0 }
-                  if (req.query.page) { prevQueryData = Object.assign({}, req.query) }
-                  prevQueryData.page = parseInt(prevQueryData.page) - 1
-                  prevPage = `${req.protocol}://${host}:${process.env.PORT}/job/?${queryString.stringify(prevQueryData)}`
+                  const prevQueryData = Object.assign({}, req.query)
+                  if (!req.query.page) {
+                    prevPage = ''
+                  } else {
+                    prevQueryData.page = parseInt(prevQueryData.page) - 1
+                    prevPage = `${req.protocol}://${host}:${process.env.PORT}/job/?${queryString.stringify(prevQueryData)}`
+                  }
                 }
 
                 res.json({

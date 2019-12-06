@@ -35,6 +35,7 @@ module.exports = {
     })
   },
   updateCompany: (id, data) => {
+    console.log(data)
     return new Promise((resolve, reject) => {
       conn.query('UPDATE company SET ? WHERE id = ?', [data, id], (err, result) => {
         if (!err) {

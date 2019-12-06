@@ -48,9 +48,15 @@ module.exports = {
         console.log(err)
       })
   },
-  updateCompany: (req, res) => {
+  updateCompany: async (req, res) => {
+    const data = await req.body
     const { id } = req.params
-    const data = req.body
+    console.log(data)
+
+    const host = req.hostname
+    req.file.filename = data.name + req.file.filename
+    const filePath = req.protocol + '://' + host + ':' + process.env.PORT + '/' + req.file.path
+    data.logo = filePath
 
     companyModels.updateCompany(id, data)
       .then(() => {
