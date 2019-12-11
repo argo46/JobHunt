@@ -35,14 +35,7 @@ module.exports = {
     } else {
       const host = req.hostname;
       req.file.filename = data.name + req.file.filename;
-      const filePath =
-        req.protocol +
-        "://" +
-        host +
-        ":" +
-        process.env.PORT +
-        "/" +
-        req.file.path;
+      const filePath = req.protocol + "://" + host + "/" + req.file.path;
       data.logo = filePath;
     }
 
@@ -66,14 +59,7 @@ module.exports = {
     if (req.file) {
       const host = req.hostname;
       req.file.filename = data.name + req.file.filename;
-      const filePath =
-        req.protocol +
-        "://" +
-        host +
-        ":" +
-        process.env.PORT +
-        "/" +
-        req.file.path;
+      const filePath = req.protocol + "://" + host + "/" + req.file.path;
       data.logo = filePath;
     }
 
