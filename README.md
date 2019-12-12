@@ -2,7 +2,6 @@
 ---
 ## Table of Contents
 
-- [Introduction](#introduction)
 - [Prerequiste](#prerequiste)
 - [Configuration](#configuration)
 - [Installation](#installation)
@@ -12,16 +11,14 @@
 - [Dependencies](#dependencies)
 ---
 
-## Introduction
----
-
 ## Prerequiste
 
 - Node.js - Download and Install [Node.js](https://nodejs.org/en/) - Simple bash script to manage multiple active node.js versions.
 
 - Nodemon - Download and Install [Nodemon](https://nodemon.io/) - nodemon is a tool that automatically restarting the node application when file changes in the directory are detected.
----
+
 - Redis - Download and Install [Redis](https://redis.io/) - Redis is an in-memory data structure project implementing a distributed, in-memory key-value database with optional durability.
+---
 
 ## Configuration
 
